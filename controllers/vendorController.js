@@ -1,3 +1,4 @@
+
 const Vendor=require("../models/Vendor");
 const jwt=require("jsonwebtoken");
 const bcrypt=require("bcryptjs");
@@ -38,9 +39,9 @@ const vendorLogin=async(req,res)=>{
         if (!vendor || !await(bcrypt.compare(password,vendor.password))){
             return res.status(401).json({error: "invalid username or password"});
         }
-
+        const vendorId=vendor._id;
         const token=jwt.sign({vendorId: vendor._id}, secretkey,{expiresIn: "1h"});
-        return res.status(200).json({success:"Login successfull", token});
+        return res.status(200).json({success:"Login successfull", token, vendorId});
         
     }
     catch{
@@ -61,11 +62,14 @@ const getAllVendors=async(req,res)=>{
 const getVendorById=async(req,res)=>{
     const vendorId=req.params.vendorId;
     try{
-        const vendor=await Vendor.findById(vendorId);
+        const vendor=await Vendor.findById(vendorId).populate("firm");
         if (!vendor){
             return res.status(400).json({message: "vendor not found"});
         }
-        return res.json({vendor});
+        const vendorFirmId=vendor.firm[0]._id;
+        const firmName=vendor.firm[0].firmName;
+        res.status(200).json({vendorId,vendorFirmId,vendor,firmName});
+        console.log(vendor,vendorFirmId,firmName);
     }
     catch{
         return res.status(500).json({error: "error"});

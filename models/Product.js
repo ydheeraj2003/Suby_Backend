@@ -18,15 +18,15 @@ const productSchema=new mongoose.Schema({
         ]
     },
     image:{
-        type:String,
+        type:String
     },
     bestSeller:{
-        type:String,
-        required:true
+        type:Boolean
+        
     },
     description:{
         type:String,
-        required:true
+       
     },
     firm:[
         {
