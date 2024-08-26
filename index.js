@@ -54,10 +54,11 @@ dotEnv.config();
 
 // Update CORS configuration
 app.use(cors({
-    origin: 'https://suby-dashboard-backend.vercel.app', // Replace with your frontend URL
+    origin: ['https://suby-dashboard-backend.vercel.app','https://suby-frontend.vercel.app' ],// Replace with your frontend URL
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
     credentials: true // Allow cookies and other credentials to be sent with requests
 }));
+
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB connected successfully!"))
